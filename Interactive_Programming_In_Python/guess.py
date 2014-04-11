@@ -1,7 +1,10 @@
-import simpleguitk as gui
+""" If you have any questions or suggestions please let me know
+my email address: junior.chen007@gmail.com
+"""
+import simplegui as gui
 import random
 import math
-
+import re
 
 #global paratemer, can be changed
 num_range = 100
@@ -10,31 +13,50 @@ value = -1
 guess = -1
 
 
-#error hanlder
+#error hanlder, codeskulptor does not support try
+#def safe_int(text):
+#    """ convert the input string to integer safely """
+                    
+#    global guess,num_range
+    
+#    try:
+#        ret = int(text)
+#    except (ValueError,TypeError),e:
+#        print "Could not convert non-number to int: ",e
+#        ret = False
+
+#    if (ret < 0 or ret >= num_range):
+#        print "Guess: %d is out of bound, Guess number must be in [0,%s)" % (guess,num_range)
+#        ret = False
+        
+#    return ret
+
+
+#error handler version 2
 def safe_int(text):
-    """ convert the input string to integer safely """
+    """ this version is based on pattern mathch
+        everytime, we check the input string only contains 
+        digit numbers """
     
     global guess,num_range
     
-    try:
-        ret = int(text)
-    except (ValueError,TypeError),e:
-        print "Could not convert non-number to int: ",e
-        ret = False
-
-    if (ret < 0 or ret >= num_range):
-        print "Guess: %d is out of bound, Guess number must be in [0,%s)" % (guess,num_range)
-        ret = False
-        
-    return ret
-
-
-
-
+    numbers = '\d+'
+    m = re.match(numbers,text)
+    if m is None:
+        print "Could not convert non-number to int!"
+        return False
+    else:
+        string = m.group()
+        if len(string) == len(text):
+          return int(text)
+        else:
+          print "Input number should be a interger!"
+          return False
+                                                                            
 
 #helper function
 def max_num_guess(range):
-    """calculate the maximum guess STEPS one can take based on binary search"""
+    """calculate the maximum guesses one can take based on binary search"""
     
     return int(round(math.log(range,2)))
 
@@ -92,7 +114,10 @@ def get_input(text):
     
     # check if we can convert the text string 
     guess = safe_int(text)
-
+    
+    #reset the input box
+    inp.set_text("")
+    
     if (guess is not False):
         # guess number is ok
         steps_left = steps_left - 1
@@ -116,7 +141,7 @@ frame = gui.create_frame("Guess the number",200,200)
 
 frame.add_button("Range is [0,100)",range100,200)
 frame.add_button("Range is [0,1000)",range1000,200)
-frame.add_input("Enter a guess",get_input,200)
+inp = frame.add_input("Enter a guess",get_input,200)
 
 
 new_game()
