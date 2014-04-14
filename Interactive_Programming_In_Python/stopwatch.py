@@ -18,7 +18,7 @@ interval = 100
 start_tick = 0
 total_trys = 0
 goodjob = 0
-
+stop_flag = False
 
 #helper functions
 
@@ -40,25 +40,30 @@ def timer_handler():
 
 
 def start_handler():
+    global stop_flag
+    stop_flag = False
     timer.start()
 
     
 
 def stop_handler():
-    global total_trys,goodjob
-    total_trys = total_trys + 1
-    if start_tick % 10 == 0:
-        goodjob = goodjob + 1
+    global total_trys,goodjob,stop_flag
+    if not stop_flag:
+        total_trys = total_trys + 1
+        if start_tick % 10 == 0:
+            goodjob = goodjob + 1
+        stop_flag = True
+        
     timer.stop()
     
     
 
 def reset_handler():
-    global start_tick,total_trys,goodjob
+    global start_tick,total_trys,goodjob,stop_flag
     start_tick = 0
     total_trys = 0
     goodjob = 0
-
+    stop_flag = True
 
 def draw(canvas):
     canvas.draw_text(format(start_tick),watch_pos,watch_font_size,watch_color)
