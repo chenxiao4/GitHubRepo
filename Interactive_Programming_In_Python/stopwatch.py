@@ -60,6 +60,7 @@ def stop_handler():
 
 def reset_handler():
     global start_tick,total_trys,goodjob,stop_flag
+    timer.stop()
     start_tick = 0
     total_trys = 0
     goodjob = 0
